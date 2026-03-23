@@ -11,5 +11,7 @@
 2. Базовый интерфейс
 3. Ручное управление   
 ## Как запустить симуляцию (Wokwi web или Wokwi for VS Code).<br>
+https://wokwi.com/projects/459274791033626625
+[![Open in Wokwi](https://wokwi.com/badge.svg)](https://wokwi.com/projects/459274791033626625)
 ## Структура репозитория (дерево папок).<br>
 ## Ссылка на доску GitHub Projects.<br>
