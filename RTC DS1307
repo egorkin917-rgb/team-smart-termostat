@@ -1,0 +1,130 @@
+"""
+RTC DS3231 для Raspberry Pi Pico
+С автоматическим поиском устройства
+"""
+
+from machine import I2C, Pin
+import utime
+
+# ========== БИБЛИОТЕКА DS3231 ==========
+DS3231_ADDRESS = 0x68
+
+def bcd_to_dec(bcd):
+    return (bcd // 16 * 10) + (bcd % 16)
+
+def dec_to_bcd(dec):
+    return (dec // 10 * 16) + (dec % 10)
+
+class DS3231:
+    def __init__(self, i2c, address=0x68):
+        self.i2c = i2c
+        self.address = address
+    
+    def set_time(self, year, month, day, hour, minute, second=0):
+        self.i2c.writeto_mem(self.address, 0x00, bytearray([dec_to_bcd(second)]))
+        utime.sleep_ms(10)
+        self.i2c.writeto_mem(self.address, 0x01, bytearray([dec_to_bcd(minute)]))
+        utime.sleep_ms(10)
+        self.i2c.writeto_mem(self.address, 0x02, bytearray([dec_to_bcd(hour)]))
+        utime.sleep_ms(10)
+        self.i2c.writeto_mem(self.address, 0x04, bytearray([dec_to_bcd(day)]))
+        utime.sleep_ms(10)
+        self.i2c.writeto_mem(self.address, 0x05, bytearray([dec_to_bcd(month)]))
+        utime.sleep_ms(10)
+        self.i2c.writeto_mem(self.address, 0x06, bytearray([dec_to_bcd(year % 100)]))
+    
+    def read_time(self):
+        data = self.i2c.readfrom_mem(self.address, 0x00, 7)
+        second = bcd_to_dec(data[0] & 0x7F)
+        minute = bcd_to_dec(data[1])
+        hour = bcd_to_dec(data[2] & 0x3F)
+        day = bcd_to_dec(data[4])
+        month = bcd_to_dec(data[5] & 0x1F)
+        year = 2000 + bcd_to_dec(data[6])
+        return (year, month, day, hour, minute, second)
+
+
+# ========== ОСНОВНАЯ ПРОГРАММА ==========
+print("=" * 50)
+print("🕐 RTC ЧАСЫ DS3231")
+print("=" * 50)
+
+# Настройка I2C
+i2c0 = I2C(0, scl=Pin(1), sda=Pin(0), freq=100000)
+i2c1 = I2C(1, scl=Pin(3), sda=Pin(2), freq=100000)
+
+# Сканирование устройств
+print("\n🔍 Сканирование I2C шины 0...")
+devices0 = i2c0.scan()
+print("   Найдено:", [hex(d) for d in devices0] if devices0 else "НИЧЕГО")
+
+print("\n🔍 Сканирование I2C шины 1...")
+devices1 = i2c1.scan()
+print("   Найдено:", [hex(d) for d in devices1] if devices1 else "НИЧЕГО")
+
+# Пытаемся найти DS3231
+found = False
+i2c = None
+
+if 0x68 in devices0:
+    print("\n✅ DS3231 найден на шине 0!")
+    i2c = i2c0
+    found = True
+elif 0x68 in devices1:
+    print("\n✅ DS3231 найден на шине 1!")
+    i2c = i2c1
+    found = True
+
+if not found:
+    print("\n❌ DS3231 НЕ НАЙДЕН!")
+    print("Проверьте diagram.json:")
+    print("- Добавлен ли 'wokwi-ds3231' в parts?")
+    print("- Правильно ли подключены пины?")
+    print("\nИспользуйте этот diagram.json:")
+    print('''
+    {
+      "version": 1,
+      "parts": [
+        { "type": "wokwi-pi-pico", "id": "pico" },
+        { "type": "wokwi-ds3231", "id": "ds1" }
+      ],
+      "connections": [
+        ["pico:GP0", "ds1:SDA"],
+        ["pico:GP1", "ds1:SCL"],
+        ["pico:3V3", "ds1:VCC"],
+        ["pico:GND", "ds1:GND"]
+      ]
+    }
+    ''')
+else:
+    # Создаем объект RTC
+    rtc = DS3231(i2c)
+    
+    # Установка времени (раскомментируйте для первой настройки)
+    print("\n📅 Установка времени...")
+    rtc.set_time(2026, 3, 29, 15, 30, 0)
+    print("✅ Время установлено!")
+    
+    print("\n" + "=" * 50)
+    print("ТЕКУЩЕЕ ВРЕМЯ:")
+    print("=" * 50)
+
+#схема подключения
+
+{
+  "version": 1,
+  "author": "Student",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-pi-pico", "id": "pico", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-ds1307", "id": "rtc1", "top": -82.2, "left": 86.5, "attrs": {} }
+  ],
+  "connections": [
+    [ "rtc1:SCL", "pico:GP1", "green", [ "h0" ] ],
+    [ "rtc1:SDA", "pico:GP0", "green", [ "h0" ] ],
+    [ "rtc1:5V", "pico:3V3", "red", [ "h0" ] ],
+    [ "rtc1:GND", "pico:GND.7", "black", [ "h0" ] ]
+  ],
+  "dependencies": {}
+}
+                      
