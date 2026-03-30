@@ -7,9 +7,7 @@
     { "type": "wokwi-ssd1306", "id": "oled", "top": 120, "left": 10, "attrs": {} },
     { "type": "wokwi-ds1307", "id": "rtc", "top": 120, "left": 180, "attrs": {} },
     { "type": "wokwi-dht22", "id": "dht22", "top": 240, "left": 10, "attrs": {} },
-    { "type": "wokwi-relay-module", "id": "relay", "top": 240, "left": 180, "attrs": {} },
-    { "type": "wokwi-ky040", "id": "encoder", "top": 360, "left": 10, "attrs": {} },
-    { "type": "wokwi-buzzer", "id": "buzzer", "top": 360, "left": 180, "attrs": {} }
+    { "type": "wokwi-relay-module", "id": "relay", "top": 240, "left": 180, "attrs": {} }
   ],
   "connections": [
     [ "pico:GND.1", "oled:GND", "black", [] ],
@@ -25,13 +23,6 @@
     [ "pico:GP15", "dht22:DATA", "yellow", [] ],
     [ "pico:VBUS", "relay:VCC", "red", [] ],
     [ "pico:GND.2", "relay:GND", "black", [] ],
-    [ "pico:GP14", "relay:IN", "orange", [] ],
-    [ "pico:3V3", "encoder:VCC", "red", [] ],
-    [ "pico:GND.3", "encoder:GND", "black", [] ],
-    [ "pico:GP2", "encoder:CLK", "green", [] ],
-    [ "pico:GP3", "encoder:DT", "blue", [] ],
-    [ "pico:GP4", "encoder:SW", "yellow", [] ],
-    [ "pico:GP17", "buzzer:+", "purple", [] ],
-    [ "pico:GND.3", "buzzer:-", "black", [] ]
+    [ "pico:GP14", "relay:IN", "orange", [] ]
   ]
 }
