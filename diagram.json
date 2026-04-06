@@ -7,7 +7,14 @@
     { "type": "wokwi-ssd1306", "id": "oled", "top": 120, "left": 10, "attrs": {} },
     { "type": "wokwi-ds1307", "id": "rtc", "top": 120, "left": 180, "attrs": {} },
     { "type": "wokwi-dht22", "id": "dht22", "top": 240, "left": 10, "attrs": {} },
-    { "type": "wokwi-relay-module", "id": "relay", "top": 240, "left": 180, "attrs": {} }
+    { "type": "wokwi-relay-module", "id": "relay", "top": 240, "left": 180, "attrs": {} },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": 419,
+      "left": 192,
+      "attrs": { "color": "green", "xray": "1" }
+    }
   ],
   "connections": [
     [ "pico:GND.1", "oled:GND", "black", [] ],
@@ -23,6 +30,9 @@
     [ "pico:GP15", "dht22:DATA", "yellow", [] ],
     [ "pico:VBUS", "relay:VCC", "red", [] ],
     [ "pico:GND.2", "relay:GND", "black", [] ],
-    [ "pico:GP14", "relay:IN", "orange", [] ]
-  ]
+    [ "pico:GP14", "relay:IN", "orange", [] ],
+    [ "pico:GP16", "btn1:1.l", "magenta", [ "v0" ] ],
+    [ "btn1:1.r", "pico:GND.3", "yellow", [ "v0" ] ]
+  ],
+  "dependencies": {}
 }
