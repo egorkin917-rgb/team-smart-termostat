@@ -13,7 +13,7 @@
       "id": "btn1",
       "top": 419,
       "left": 192,
-      "attrs": { "color": "green", "xray": "1" }
+      "attrs": { "color": "green" }
     }
   ],
   "connections": [
@@ -31,8 +31,9 @@
     [ "pico:VBUS", "relay:VCC", "red", [] ],
     [ "pico:GND.2", "relay:GND", "black", [] ],
     [ "pico:GP14", "relay:IN", "orange", [] ],
-    [ "pico:GP16", "btn1:1.l", "magenta", [ "v0" ] ],
-    [ "btn1:1.r", "pico:GND.3", "yellow", [ "v0" ] ]
+    [ "pico:GP16", "btn1:1.l", "purple", [] ],
+    [ "btn1:2.l", "pico:GND.3", "black", [] ],
+    [ "dht22:SDA", "pico:GP15", "green", [ "v0" ] ]
   ],
   "dependencies": {}
 }
