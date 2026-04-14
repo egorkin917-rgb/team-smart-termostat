@@ -1,0 +1,25 @@
+from machine import Pin
+import time
+
+# Настройка реле на GPIO 14
+relay = Pin(14, Pin.OUT)
+
+# Начинаем с выключенного состояния (HIGH = выключено)
+relay.value(1)
+print("Старт! Реле выключено")
+print("=" * 30)
+
+# Мигаем реле 10 раз
+for i in range(10):
+    # Включаем реле (LOW = включено)
+    relay.value(0)
+    print(f"🔴 {i+1}: РЕЛЕ ВКЛЮЧЕНО")
+    time.sleep(1)
+    
+    # Выключаем реле (HIGH = выключено)
+    relay.value(1)
+    print(f"⚪️ {i+1}: РЕЛЕ ВЫКЛЮЧЕНО")
+    time.sleep(1)
+
+print("=" * 30)
+print("Готово! Реле выключено")
