@@ -3,11 +3,37 @@
   "author": "team-smart-termostat",
   "editor": "wokwi",
   "parts": [
-    { "type": "wokwi-pi-pico", "id": "pico", "top": -10, "left": -10, "attrs": {} },
-    { "type": "wokwi-led", "id": "led1", "top": 120, "left": 160, "attrs": { "color": "red" } }
+    { "type": "wokwi-pi-pico", "id": "pico", "top": 390.45, "left": -44.4, "attrs": {} },
+    { "type": "wokwi-ssd1306", "id": "oled", "top": 120, "left": 10, "attrs": {} },
+    { "type": "wokwi-ds1307", "id": "rtc", "top": 120, "left": 180, "attrs": {} },
+    { "type": "wokwi-dht22", "id": "dht22", "top": 240, "left": 10, "attrs": {} },
+    { "type": "wokwi-relay-module", "id": "relay", "top": 240, "left": 180, "attrs": {} },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": 419,
+      "left": 192,
+      "attrs": { "color": "green" }
+    }
   ],
   "connections": [
-    [ "pico:GP15", "led1:A", "green" ],
-    [ "pico:GND.1", "led1:K", "black" ]
-  ]
+    [ "pico:GND.1", "oled:GND", "black", [] ],
+    [ "pico:VBUS", "oled:VCC", "red", [] ],
+    [ "pico:GP0", "oled:SDA", "green", [] ],
+    [ "pico:GP1", "oled:SCL", "blue", [] ],
+    [ "pico:GND.1", "rtc:GND", "black", [] ],
+    [ "pico:VBUS", "rtc:VCC", "red", [] ],
+    [ "pico:GP0", "rtc:SDA", "green", [] ],
+    [ "pico:GP1", "rtc:SCL", "blue", [] ],
+    [ "pico:3V3", "dht22:VCC", "red", [] ],
+    [ "pico:GND.2", "dht22:GND", "black", [] ],
+    [ "pico:GP15", "dht22:DATA", "yellow", [] ],
+    [ "pico:VBUS", "relay:VCC", "red", [] ],
+    [ "pico:GND.2", "relay:GND", "black", [] ],
+    [ "pico:GP14", "relay:IN", "orange", [] ],
+    [ "pico:GP16", "btn1:1.l", "purple", [] ],
+    [ "btn1:2.l", "pico:GND.3", "black", [] ],
+    [ "dht22:SDA", "pico:GP15", "green", [ "v0" ] ]
+  ],
+  "dependencies": {}
 }
